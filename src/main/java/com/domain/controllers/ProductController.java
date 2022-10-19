@@ -1,8 +1,10 @@
 package com.domain.controllers;
 
-import java.util.Optional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.domain.models.entities.Product;
-import com.domain.models.repos.ProductRepo;
 import com.domain.services.ProductService;
 
 @RestController
@@ -24,7 +25,14 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public Product createOne(@RequestBody Product product) {
+    public Product createOne(@Valid @RequestBody Product product, Errors errors) {
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                System.err.println(error.getDefaultMessage());
+            }
+            throw new RuntimeException("Validation Error");
+
+        }
         return productService.save(product);
     }
 
