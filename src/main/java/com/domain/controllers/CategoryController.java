@@ -16,24 +16,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.domain.dto.CategoryData;
 import com.domain.dto.ResponseData;
-import com.domain.dto.SupplierData;
-import com.domain.models.entities.Supplier;
-import com.domain.services.SupplierService;
+import com.domain.models.entities.Category;
+import com.domain.services.CategoryService;
 
 @RestController
-@RequestMapping("/api/suppliers")
-public class SupplierController {
+@RequestMapping("/api/categories")
+public class CategoryController {
 
     @Autowired
-    private SupplierService supplierService;
+    private CategoryService categoryService;
 
     @Autowired
     private ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<ResponseData<Supplier>> create(@Valid @RequestBody SupplierData supplierData, Errors errors) {
-        ResponseData<Supplier> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseData<Category>> create(@Valid @RequestBody CategoryData categoryData, Errors errors) {
+        ResponseData<Category> responseData = new ResponseData<>();
+
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
@@ -42,28 +43,26 @@ public class SupplierController {
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
-
-        Supplier supplier = modelMapper.map(supplierData, Supplier.class);
-
+        Category category = modelMapper.map(categoryData, Category.class);
         responseData.setStatus(true);
-        responseData.setPayload(supplierService.save(supplier));
+        responseData.setPayload(categoryService.save(category));
         return ResponseEntity.ok(responseData);
-
     }
 
     @GetMapping
-    public Iterable<Supplier> findAll() {
-        return supplierService.findAll();
+    public Iterable<Category> findAll() {
+        return categoryService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Supplier findOne(@PathVariable("id") Long id) {
-        return supplierService.findOne(id);
+    public Category findOne(@PathVariable("id") Long id) {
+        return categoryService.findOne(id);
     }
 
     @PutMapping
-    public ResponseEntity<ResponseData<Supplier>> update(@Valid @RequestBody SupplierData supplierData, Errors errors) {
-        ResponseData<Supplier> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseData<Category>> update(@Valid @RequestBody CategoryData categoryData, Errors errors) {
+        ResponseData<Category> responseData = new ResponseData<>();
+
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
@@ -72,13 +71,10 @@ public class SupplierController {
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
-
-        Supplier supplier = modelMapper.map(supplierData, Supplier.class);
-
+        Category category = modelMapper.map(categoryData, Category.class);
         responseData.setStatus(true);
-        responseData.setPayload(supplierService.save(supplier));
+        responseData.setPayload(categoryService.save(category));
         return ResponseEntity.ok(responseData);
-
     }
 
 }
