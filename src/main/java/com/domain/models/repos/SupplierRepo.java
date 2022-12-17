@@ -6,4 +6,6 @@ import com.domain.models.entities.Supplier;
 
 public interface SupplierRepo extends CrudRepository<Supplier, Long> {
 
+    Supplier findByEmail(String email);
+
 }
